@@ -2,18 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 
-def namechange(name):
-	link=name.replace(" - ","-")
-	link = link.replace("- ", "-")
-	link = link.replace("/", "-")
-	link =link.replace(" ", "-")
-	link="https://catalog.southeasterntech.edu/college-catalog/current/courses/"+link
-	r = requests.get(link)
-	if r.status_code != 404:
-		return link
-	else:
-		return None
-
 
 url = "https://catalog.southeasterntech.edu/college-catalog/current/courses"
 html = requests.get(url)
