@@ -44,3 +44,4 @@ for major in majors:
 				print(classy.text)
 		if "Welding" in major.text:
 			break
+		#okay
