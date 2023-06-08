@@ -15,7 +15,7 @@ url = "https://www.albanytech.edu/college-catalog/current/programs"
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
 majors = soup.findAll("td", attrs={"class":"program-name"})
-print(len(majors))
+# print(len(majors))
 for major in majors:
     link=major.find("a", attrs={"class":None}, href=True)
     link="https://www.albanytech.edu"+link['href']
