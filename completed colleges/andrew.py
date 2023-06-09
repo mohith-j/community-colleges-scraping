@@ -11,8 +11,8 @@ def extract(pdfs):
             text.append(content)
 
         return text
-
-extractedText = extract('AC-Catalog-2022-2023-08082022.pdf')
+#AC-Catalog-2022-2023-08082022
+extractedText = extract('andrew.pdf')
 
 
 pattern = r"[A-Z]{3} [0-9]{3} - [A-Z].+\("
