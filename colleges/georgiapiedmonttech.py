@@ -32,12 +32,35 @@ for clas in extractedText:
         classmatches.extend(match)
 
 count = 0
+#classmatches = sorted([*set(classmatches)])
+res = []
+final = []
+
+
 for mm in majormatches:
     if "ACCT – Accounting" in mm or count > 0:
         count += 1
         print('---------------------------------')
         print(mm)
         mjr = mm[0:4]
+        for x in classmatches:
+            if x[0:10] not in res:
+                res.append(x[0:10])
+                final.append(x)
+        for i in final:
+            if i[0:4] == mjr:
+                i = i.strip("                       3")
+                i = i.strip("(4)")
+                i = i.strip("(3)")
+                i = i.strip("(2)")
+                i = i.strip("(1)")
+                i = i.strip(" (4)6")
+                i = i.replace("     ", " ")
+                i = i.replace("    ", " ")
+                i = i.replace(" – ", " ")
+                i = i.replace("  ", " ")
+                print(i)
+        '''
         for m in classmatches:
             if m[0:4]== mjr:
                 m = m.strip("                       3")
@@ -50,6 +73,7 @@ for mm in majormatches:
                 m = m.replace("    ", " ")
                 m = m.replace(" – ", " ")
                 print(m)
+        '''
     else:
         continue
 
