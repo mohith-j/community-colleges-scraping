@@ -1,30 +1,35 @@
-from bs4 import BeautifulSoup
-import requests
-import csv
+import PyPDF2
+import re
 
-def namechange(name):
-	link=name.replace(" - ","-")
-	link = link.replace("- ", "-")
-	link = link.replace("/", "-")
-	link =link.replace(" ", "-")
-	link="https://catalog.coastalpines.edu/classes/"+link
-	r = requests.get(link)
-	if r.status_code != 404:
-		return link
-	else:
-		return None
+def extract(pdfs):
+    with open(pdfs, "rb") as pdf:
+        reader = PyPDF2.PdfReader(pdf, strict=False)
+        text = []
+
+        for page in reader.pages:
+            content = page.extract_text()
+            text.append(content)
+
+        return text
+
+extractedText = extract('coastalpinestech.pdf')
 
 
-url = "https://catalog.coastalpines.edu/classes"
-html = requests.get(url)
-soup = BeautifulSoup(html.text, "html.parser")
-majors = soup.findAll("div", attrs={"class":"field field--name-field-class-program field--type-entity-reference field--label-hidden field__item"})
-classname = soup.findAll("span", attrs={"class": "field field--name-field-item field--type-string field--label-hidden field__item"})
+pattern = r"[A-Z]{4} \d{4}\: [A-Z].+"
+matches = []
 
-for major in majors:
-	if "Program" in major.text or "Course" in major.text:
-		continue
-	print('---------------------------------')
-	print(major.text)
-	for classy in classname:
-		print(classy.text)
+for text in extractedText:
+    match = re.findall(pattern, text)
+    if match:
+        matches.extend(match)
+
+
+count = 0
+matches = sorted(matches)
+currmjr = ""
+for m in matches:
+    if currmjr != m[0:4]:
+        print('---------------------------------')
+        print(m[0:4])
+    currmjr = m[0:4]
+    print(m)
