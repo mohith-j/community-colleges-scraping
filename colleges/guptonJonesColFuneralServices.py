@@ -25,4 +25,6 @@ for text in extractedText:
 
 #matches = sorted(matches)
 for m in matches:
+    m=m[:-1]
     print(m)
+
