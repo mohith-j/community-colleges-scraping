@@ -59,21 +59,11 @@ for mm in majormatches:
                 i = i.replace("    ", " ")
                 i = i.replace(" – ", " ")
                 i = i.replace("  ", " ")
+                i = i.replace("ALHS 1011 and ALHS 1090. The PN Dept. will take", "ALHS 1011 Structure and Function of the Human Body")
+                i = i.replace("ALHS 1010 Introduction to Anatomy and Physiology", "")
+                i = i.replace("ALHS 1090", "ALHS 1090 Medical Terminology for Allied Health Sciences")
+                i = i.replace("BIOL 2117 Introduction t o Microbiology (3) + BIOL", "BIOL 2117 Introduction t o Microbiology")
                 print(i)
-        '''
-        for m in classmatches:
-            if m[0:4]== mjr:
-                m = m.strip("                       3")
-                m = m.strip("(4)")
-                m = m.strip("(3)")
-                m = m.strip("(2)")
-                m = m.strip("(1)")
-                m = m.strip(" (4)6")
-                m = m.replace("     ", " ")
-                m = m.replace("    ", " ")
-                m = m.replace(" – ", " ")
-                print(m)
-        '''
     else:
         continue
 
