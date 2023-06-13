@@ -15,7 +15,7 @@ def extract(pdfs):
 extractedText = extract('saeinsttech.pdf')
 
 
-classes = r"[A-Z]{3}\d{3} .+"
+classes = r"[A-Z]{3}\d{3}"
 classmatches = []
 
 
@@ -25,7 +25,12 @@ for clas in extractedText:
         classmatches.extend(match)
 
 classmatches = sorted([*set(classmatches)])
-
+currmjr = ""
 for m in classmatches:
-    print(m[0:35])
-    print("--------------")
+    if currmjr != m[0:3]:
+        print("--------------")
+        print(m[0:3])
+    currmjr = m[0:3]
+    print(m)
+
+

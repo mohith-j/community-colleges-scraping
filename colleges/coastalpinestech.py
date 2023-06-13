@@ -12,10 +12,11 @@ def extract(pdfs):
 
         return text
 
+
 extractedText = extract('coastalpinestech.pdf')
 
 
-pattern = r"[A-Z]{4} \d{4}\: [A-Z].+"
+pattern = r"[A-Z]{4} \d{4}\: [A-Za-z].+"
 matches = []
 
 for text in extractedText:
