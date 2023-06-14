@@ -12,7 +12,7 @@ def extract(pdfs):
 
 		return text
 
-extractedText = extract('atlantainstmusmed.pdf')
+extractedText = extract('completed colleges/atlantainstmusmed.pdf')
 
 
 pattern = r"[A-Z]{3}\d{3} [A-Z].+"

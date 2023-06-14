@@ -12,7 +12,7 @@ def extract(pdfs):
 
         return text
 #AC-Catalog-2022-2023-08082022
-extractedText = extract('centralgeorgiatech.pdf')
+extractedText = extract('completed colleges/centralgeorgiatech.pdf')
 
 
 pattern = r"[A-Z]{4} \d{4} \| .+"

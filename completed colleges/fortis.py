@@ -12,7 +12,7 @@ def extract(pdfs):
 
         return text
 
-extractedText = extract('fortis.pdf')
+extractedText = extract('completed colleges/fortis.pdf')
 
 
 classy = r"[A-Z]{3}\d{3} .+"

@@ -12,7 +12,7 @@ def extract(pdfs):
 
         return text
 
-extractedText = extract('piedmont.pdf')
+extractedText = extract('completed colleges/piedmont.pdf')
 
 
 classes = r"[A-Z]{4} \d{4} .+"

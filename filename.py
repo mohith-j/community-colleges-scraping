@@ -1,16 +1,17 @@
 import os
 import subprocess
 
-#\\wsl.localhost\Ubuntu\home\trevor\iQuadra\collegeWebScraping\Github repo\completed colleges
+# Give complete path
+directory = '/Users/mohithjothikannan/Desktop/python-scripts/completed colleges'
 
-for x in os.listdir("\completed colleges"):
-    if x.endswith(".py"):
-        # Prints only text file present in My Folder
-        print(x)
-        # Execute the other file and capture its output
-        output = subprocess.check_output(['python3', x])
-        # Decode the output from bytes to string
-        output = output.decode('utf-8')
-        # Print the output
-        print(output)
+# Iterate over all files in the directory
+for filename in os.listdir(directory):
+    filepath = os.path.join(directory, filename)
+    
+    # Check if the file is a Python file
+    if filename.endswith('.py'):
+        print(f'Running file: {filename}')
+        
+        # Run the Python file using subprocess
+        subprocess.run(['python3', filepath])
 
