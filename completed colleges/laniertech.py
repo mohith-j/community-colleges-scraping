@@ -56,7 +56,7 @@ def extract(pdfs):
 
 		return text
 
-extractedText = extract('completed colleges/laniertech.pdff')
+extractedText = extract('completed colleges/laniertech.pdf')
 
 
 pattern = r"[A-Z]{4} \d{4} [A-Z].+ \("
