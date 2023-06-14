@@ -13,24 +13,30 @@ def extract(pdfs):
         return text
 
 extractedText = extract('saeinsttech.pdf')
+c=0
+for p in extractedText:
+    print(p)
+    c+=1
+    if c==2:
+        break
 
 
-classes = r"[A-Z]{3}\d{3}"
-classmatches = []
+# classes = r"[A-Z]{3}\d{3}"
+# classmatches = []
 
 
-for clas in extractedText:
-    match = re.findall(classes, clas)
-    if match:
-        classmatches.extend(match)
+# for clas in extractedText:
+#     match = re.findall(classes, clas)
+#     if match:
+#         classmatches.extend(match)
 
-classmatches = sorted([*set(classmatches)])
-currmjr = ""
-for m in classmatches:
-    if currmjr != m[0:3]:
-        print("--------------")
-        print(m[0:3])
-    currmjr = m[0:3]
-    print(m)
+# classmatches = sorted([*set(classmatches)])
+# currmjr = ""
+# for m in classmatches:
+#     if currmjr != m[0:3]:
+#         print("--------------")
+#         print(m[0:3])
+#     currmjr = m[0:3]
+#     print(m)
 
 
