@@ -1,7 +1,9 @@
 import os
 import subprocess
 
-for x in os.listdir():
+#\\wsl.localhost\Ubuntu\home\trevor\iQuadra\collegeWebScraping\Github repo\completed colleges
+
+for x in os.listdir("\completed colleges"):
     if x.endswith(".py"):
         # Prints only text file present in My Folder
         print(x)
