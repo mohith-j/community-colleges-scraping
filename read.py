@@ -21,7 +21,14 @@ worksheet1 = gs.worksheet('Sheet1')
 
 # dataframe (create or import it)
 df = pd.DataFrame({'a': ['apple','airplane','alligator'], 'b': ['banana', 'ball', 'butterfly'], 'c': ['cantaloupe', 'crane', 'cat']})
+
+
 # write to dataframe
 worksheet1.clear()
 set_with_dataframe(worksheet=worksheet1, dataframe=df, include_index=False,
 include_column_header=True, resize=True)
+
+# dataframe (create or import it)
+df = pd.DataFrame({'a':['astronaut', 'ant'], 'b':['bingo', 'bee'], 'c':['candy', 'cake']})
+df_values = df.values.tolist()
+gs.values_append('Sheet1', {'valueInputOption': 'RAW'}, {'values': df_values})
