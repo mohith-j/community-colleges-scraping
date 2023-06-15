@@ -33,8 +33,5 @@ for major in majors:
     #     break
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
     df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
- 
-
-
 
 
