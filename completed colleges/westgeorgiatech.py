@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
-import csv
+import pandas as pd
+from openpyxl import load_workbook
 
 def namechange(name):
 	link = name.replace(" - ","-")
@@ -25,7 +26,10 @@ url = "https://westgatech.smartcatalogiq.com/en/2022-2023/student-catalog/course
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
 majors = soup.findAll("a", attrs={"class":None}, href=True)
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
 
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 
 for major in majors:
 	if "General Catalog" in major.text or "Student Catalog and Handbook 2022-2023" in major.text:
@@ -42,5 +46,8 @@ for major in majors:
 				continue
 			if ("0" in classy.text or "1" in classy.text or "2" in classy.text) and len(classy.text) > 5:
 				print(classy.text)
+				df.loc[len(df.index)] = ["West Georgia Technical College",major.text, classy.text]
 		if "Welding" in major.text:
 			break
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
