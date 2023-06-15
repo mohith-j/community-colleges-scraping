@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import pandas as pd
 
 
 def namechange(name):
@@ -19,7 +20,7 @@ def namechange(name):
 
 
 
-
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 url = "https://augustatech.smartcatalogiq.com/en/2023/semester-catalog/course-descriptions/"
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
@@ -41,10 +42,10 @@ for major in majors:
                 continue
             if "1" in classy.text or "2" in classy.text or "3" in classy.text:
                 print(classy.text)
+                df.loc[len(df.index)] = ["Augusta Technical College",major.text, classy.text]
     if "Welding" in major.text:
         break
-
-
-
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
 
 

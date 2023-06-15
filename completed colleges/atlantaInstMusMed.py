@@ -50,6 +50,6 @@ for i in final:
 		print(i[0:3])
 	currmjr = i[0:3]
 	print(i)
-	df.loc[len(df.index)] = ["Andrew College",currmjr, m]
+	df.loc[len(df.index)] = ["Atlanta Institute of Music and Media",currmjr, m]
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
 	df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
