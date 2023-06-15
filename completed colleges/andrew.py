@@ -1,5 +1,6 @@
 import PyPDF2
 import re
+import pandas as pd
 
 def extract(pdfs):
     with open(pdfs, "rb") as pdf:
@@ -14,7 +15,7 @@ def extract(pdfs):
 #AC-Catalog-2022-2023-08082022
 extractedText = extract('completed colleges/andrew.pdf')
 
-
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 pattern = r"[A-Z]{3} [0-9]{3} - [A-Z].+\("
 majors = r"[A-Z]{3} - [A-Za-z].+?\."
 majormatches = []
@@ -46,3 +47,6 @@ for mm in majormatches:
         m = m.strip("(")
         if m[0:3] == majorname:
             print(m)
+            df.loc[len(df.index)] = ["Andrew College",majorname, m]
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
