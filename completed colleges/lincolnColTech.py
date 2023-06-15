@@ -1,6 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import pandas as pd
+from openpyxl import load_workbook
+
+
 
 def namechange(name):
 	link=name.replace(" - ","-")
@@ -21,18 +25,22 @@ def namechange(name):
 		return None
 
 
-
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 firsturl = "https://www.lincolntech.edu/careers/skilled-trades/hvac/air-conditioning-refrigeration-heating-technology-5"
 firsthtml = requests.get(firsturl)
 firstsoup = BeautifulSoup(firsthtml.text, "html.parser")
 firstmajors = firstsoup.findAll("h1", attrs={"class": None})
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
+
 for firstmajor in firstmajors:
-    fir = firstmajor.text.replace(" — Marietta", "")
-    print('---------------------------------')
-    print(fir)
-    firstclasses = firstsoup.findAll("span", attrs={"property": "schema:name"})
-    for firstclass in firstclasses:
-	    print(firstclass.text)
+	fir = firstmajor.text.replace(" — Marietta", "")
+	print('---------------------------------')
+	print(fir)
+	firstclasses = firstsoup.findAll("span", attrs={"property": "schema:name"})
+	for firstclass in firstclasses:
+		print(firstclass.text)
+		df.loc[len(df.index)] = ["Lincoln College of Technology",fir, firstclass.text]
 
 securl = "https://www.lincolntech.edu/careers/skilled-trades/electrical/electrical-and-electronic-systems-technician-1"
 sechtml = requests.get(securl)
@@ -47,8 +55,10 @@ for secmajor in secmajors:
 		if secclass.text[0] == " ":
 			last = secclass.text[1:]
 			print(last)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",sec, last]
 		else:
 			print(secclass.text)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",sec, secclass.text]
 
 thiurl = "https://www.lincolntech.edu/careers/skilled-trades/electrical/electrical-and-electronic-systems-technician-2"
 thihtml = requests.get(thiurl)
@@ -63,8 +73,11 @@ for thimajor in thimajors:
 		if thiclass.text[0] == " ":
 			last = thiclass.text[1:]
 			print(last)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",thi, last]
 		else:
 			print(thiclass.text)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",thi, thiclass.text]
+
 
 foururl = "https://www.lincolntech.edu/careers/health-sciences/medical-assistant-technology/medical-assistant-technology-courses-4"
 fourhtml = requests.get(foururl)
@@ -79,8 +92,11 @@ for fourmajor in fourmajors:
 		if fourclass.text[0] == " ":
 			last = fourclass.text[1:]
 			print(last)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",four, last]
 		else:
 			print(fourclass.text)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",four, fourclass.text]
+
 
 fiveurl = "https://www.lincolntech.edu/careers/health-sciences/medical-assistant/medical-assistant-10"
 fivehtml = requests.get(fiveurl)
@@ -95,5 +111,9 @@ for fivemajor in fivemajors:
 		if fiveclass.text[0] == " ":
 			last = fiveclass.text[1:]
 			print(last)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",five, last]
 		else:
 			print(fiveclass.text)
+			df.loc[len(df.index)] = ["Lincoln College of Technology",five, fiveclass.text]
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
