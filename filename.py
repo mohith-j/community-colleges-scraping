@@ -1,5 +1,14 @@
 import os
 import subprocess
+from openpyxl import Workbook
+import openpyxl
+import pandas as pd
+
+def addHeaders():
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.append(["Colleges","Majors","Courses"])
+    workbook.save('data.xlsx')
 
 # Give complete path
 directory = '/Users/mohithjothikannan/Desktop/python-scripts/completed colleges'
