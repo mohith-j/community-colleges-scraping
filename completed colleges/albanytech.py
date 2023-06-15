@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+from openpyxl import load_workbook
 
 
 def get_classes(name, link):
@@ -19,6 +20,8 @@ url = "https://www.albanytech.edu/college-catalog/current/programs"
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
 majors = soup.findAll("td", attrs={"class":"program-name"})
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
 # c=0
 for major in majors:
     link=major.find("a", attrs={"class":None}, href=True)
@@ -29,7 +32,7 @@ for major in majors:
     # if c==4:
     #     break
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
-    df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
  
 
 

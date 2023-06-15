@@ -1,6 +1,7 @@
 import PyPDF2
 import re
 import pandas as pd
+from openpyxl import load_workbook
 
 def extract(pdfs):
     with open(pdfs, "rb") as pdf:
@@ -14,6 +15,11 @@ def extract(pdfs):
         return text
 #AC-Catalog-2022-2023-08082022
 extractedText = extract('completed colleges/andrew.pdf')
+
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
+
+
 
 df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 pattern = r"[A-Z]{3} [0-9]{3} - [A-Z].+\("
@@ -49,4 +55,4 @@ for mm in majormatches:
             print(m)
             df.loc[len(df.index)] = ["Andrew College",majorname, m]
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
-    df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
