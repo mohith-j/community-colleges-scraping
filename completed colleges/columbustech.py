@@ -1,6 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import pandas as pd
+from openpyxl import load_workbook
+
 
 def namechange(name):
 	link = name.replace(" - ","-")
@@ -25,10 +28,13 @@ def namechange(name):
 		return None
 
 
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 url = "https://iq2.smartcatalogiq.com/en/Catalogs/Columbus-Technical-College/2021-2022/2021-22-Catalog-and-Student-Handbook/Courses"
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
 majors = soup.findAll("a", attrs={"class":None}, href=True)
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
 
 
 for major in majors:
@@ -48,10 +54,16 @@ for major in majors:
 				if (classy.text[0] == " " and classy.text[1] == " "):
 					last = classy.text[2:]
 					print(last)
+					df.loc[len(df.index)] = ["Columbus Technical College",major.text, last]
 				elif classy.text[0] == " ":
 					last = classy.text[1:]
 					print(last)
+					df.loc[len(df.index)] = ["Columbus Technical College",major.text, last]
 				else:
 					print(classy.text)
+					df.loc[len(df.index)] = ["Columbus Technical College",major.text, classy.text]
 		if major.text == "WELD - Welding":
 			break
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
+ 
