@@ -1,7 +1,6 @@
 import os
 import subprocess
 from openpyxl import Workbook
-import openpyxl
 import pandas as pd
 
 def addHeaders():

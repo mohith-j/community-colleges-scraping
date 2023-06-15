@@ -1,14 +1,15 @@
 from bs4 import BeautifulSoup
 import requests
-import csv
 import pandas as pd
+from openpyxl import load_workbook
 
 df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 url = "https://atlantatech.smartcatalogiq.com/2022-2023/College-Catalog/Courses"
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
 classy = soup.findAll("a", attrs={"class":None}, href=True)
-
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
 
 li = []
 count = 0
@@ -34,4 +35,4 @@ for classes in classy:
 		df.loc[len(df.index)] = ["Atlanta Technical College",mjr, final]
 
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
-    df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
