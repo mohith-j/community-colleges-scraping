@@ -46,6 +46,11 @@ for i in final:
 		print(i[0:4])
 	currmjr = i[0:4]
 	print(i)
+	# if "ACCT 2115 - Bookkeeper Certication Review" in i:
+	# 	# df.loc[len(df.index)] = ["Southern Regional Technical College",currmjr, "ACCT 2115 - Bookkeeper Certication Review"]
+	# 	print("wassup")
 	df.loc[len(df.index)] = ["Southern Regional Technical College",currmjr, i]
+df = df.applymap(lambda x: x.encode('unicode_escape').
+                 decode('utf-8') if isinstance(x, str) else x)
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
     df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
