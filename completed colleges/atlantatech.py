@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import pandas as pd
 
-
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 url = "https://atlantatech.smartcatalogiq.com/2022-2023/College-Catalog/Courses"
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
@@ -23,9 +24,14 @@ for classes in classy:
 		print(mjr)
 		final = classes.text[10:]
 		print(final)
+		df.loc[len(df.index)] = ["Albany Technical College",mjr, final]
 		li.append(mjr)
 	else:
 		final = classes.text[10:]
 		if final[0] == " ":
 			final = classes.text[11:]
 		print(final)
+		df.loc[len(df.index)] = ["Albany Technical College",mjr, final]
+
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
