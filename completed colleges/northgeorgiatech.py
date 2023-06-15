@@ -1,5 +1,7 @@
 import PyPDF2
 import re
+import pandas as pd
+from openpyxl import load_workbook
 
 def extract(pdfs):
     with open(pdfs, "rb") as pdf:
@@ -13,7 +15,9 @@ def extract(pdfs):
         return text
 
 extractedText = extract('completed colleges/northgeorgiatech.pdf')
-
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 
 pattern = r"[A-Z]{4} \d{4} – [A-Z].+ \("
 matches = []
@@ -39,3 +43,6 @@ for m in matches:
     m = m.replace("(Basic Skills – non-degree level)Prerequisites: ENGL 0090 or Appropriate Writing", "")
     m = m.replace("(4-2-5)Prerequisites (diploma): ALHS 1011, ALHS 1090, ENGL 1010, MATH 1012Prerequisites", "")
     print(m)
+    df.loc[len(df.index)] = ["North Georgia Technical College",currmjr,m]
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
