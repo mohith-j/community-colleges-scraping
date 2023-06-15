@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 import pandas as pd
+from openpyxl import load_workbook
 
 
 def namechange(name):
@@ -25,6 +26,8 @@ url = "https://augustatech.smartcatalogiq.com/en/2023/semester-catalog/course-de
 html = requests.get(url)
 soup = BeautifulSoup(html.text, "html.parser")
 majors = soup.findAll("a", attrs={"class":None}, href=True)
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
 
 
 for major in majors:
@@ -46,6 +49,6 @@ for major in majors:
     if "Welding" in major.text:
         break
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
-    df.to_excel(writer,sheet_name="Sheet",header=False, index=False)
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
 
 
