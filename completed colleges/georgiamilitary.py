@@ -1,5 +1,7 @@
 import PyPDF2
 import re
+import pandas as pd
+from openpyxl import load_workbook
 
 def extract(pdfs):
     with open(pdfs, "rb") as pdf:
@@ -14,6 +16,9 @@ def extract(pdfs):
 
 extractedText = extract('completed colleges/georgiamilitary.pdf')
 
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 
 pattern = r"[A-Z]{3} \d{3} [A-Z].+"
 altpattern = r"[A-Z]{3} \d{3}[A-Z] [A-Z].+"
@@ -76,3 +81,6 @@ for f in final:
     f = f.replace("3qh", "")
     f = f.replace(",", "")
     print(f)
+    df.loc[len(df.index)] = ["Georgia Military College",currmjr, f]
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)

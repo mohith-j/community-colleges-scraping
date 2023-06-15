@@ -1,5 +1,7 @@
 import PyPDF2
 import re
+import pandas as pd
+from openpyxl import load_workbook
 
 def extract(pdfs):
     with open(pdfs, "rb") as pdf:
@@ -14,11 +16,13 @@ def extract(pdfs):
 
 extractedText = extract('completed colleges/fortis.pdf')
 
-
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
 classy = r"[A-Z]{3}\d{3} .+"
 major = r"[A-Z]{3} \.+ .+"
 majormatches = []
 classymatches = []
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 
 medasst = "MAS  Medical Assisting"
 medasstpat = r"MAS\d{3} .+"
@@ -65,15 +69,20 @@ for mm in majormatches:
             medclasses = medclasses.strip(" 18")
             if medclasses == "MAS190 Externship":
                 print(medclasses)
+                df.loc[len(df.index)] = ["Fortis College-Smyrna",majorname, medclasses]
+
                 break
             else:
                 print(medclasses)
+                df.loc[len(df.index)] = ["Fortis College-Smyrna",majorname, medclasses]
+
         print('---------------------------------')
         print(medofad)
         for mclass in medofadli:
             mclass = mclass.strip("  60 4")
             mclass = mclass.replace("  ", " ")
             print(mclass)
+            df.loc[len(df.index)] = ["Fortis College-Smyrna",majorname, mclass]
     print('---------------------------------')
     print(mm)
     for m in classymatches:
@@ -85,4 +94,6 @@ for mm in majormatches:
             m = m.strip("    12")
             m = m.replace("  ", " ")
             print(m)
-
+            df.loc[len(df.index)] = ["Fortis College-Smyrna",majorname, m]
+with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
+    df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)
