@@ -10,6 +10,7 @@ def addHeaders():
     worksheet.append(["Colleges","Majors","Courses"])
     workbook.save('data.xlsx')
 
+#addHeaders()
 # Give complete path
 directory = '/Users/mohithjothikannan/Desktop/python-scripts/completed colleges'
 
