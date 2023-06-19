@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import csv
 import pandas as pd
 from openpyxl import load_workbook
 
@@ -46,7 +45,7 @@ for major in majors:
 				continue
 			if ("0" in classy.text or "1" in classy.text or "2" in classy.text) and len(classy.text) > 5:
 				print(classy.text)
-				df.loc[len(df.index)] = ["Albany Technical College",major.text, classy.text]
+				df.loc[len(df.index)] = ["Chattahoochee Technical College",major.text, classy.text]
 		if "Welding" in major.text:
 			break
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
