@@ -14,7 +14,7 @@ def extract(pdfs):
 
         return text
 
-extractedText = extract('completed colleges/fortis.pdf')
+extractedText = extract('collegeList/fortis.pdf')
 
 book = load_workbook('data.xlsx')
 sheet=book.worksheets[0]

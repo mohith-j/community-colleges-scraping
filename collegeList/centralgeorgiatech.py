@@ -13,13 +13,14 @@ def extract(pdfs):
             text.append(content)
 
         return text
+#AC-Catalog-2022-2023-08082022
+extractedText = extract('collegeList/centralgeorgiatech.pdf')
 
-extractedText = extract('completed colleges/northgeorgiatech.pdf')
 book = load_workbook('data.xlsx')
 sheet=book.worksheets[0]
-df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
 
-pattern = r"[A-Z]{4} \d{4} – [A-Z].+ \("
+df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
+pattern = r"[A-Z]{4} \d{4} \| .+"
 matches = []
 
 for text in extractedText:
@@ -27,22 +28,16 @@ for text in extractedText:
     if match:
         matches.extend(match)
 
-
 count = 0
-matches = sorted(matches)
 currmjr = ""
 for m in matches:
     if currmjr != m[0:4]:
         print('---------------------------------')
         print(m[0:4])
     currmjr = m[0:4]
-    m = m.strip("(")
-    m = m.replace("(3-0-3)", "")
-    m = m.replace("(4-0-4)", "")
-    m = m.replace("(2-3-3)", "")
-    m = m.replace("(Basic Skills – non-degree level)Prerequisites: ENGL 0090 or Appropriate Writing", "")
-    m = m.replace("(4-2-5)Prerequisites (diploma): ALHS 1011, ALHS 1090, ENGL 1010, MATH 1012Prerequisites", "")
+    m = re.sub("\(.*?\)","",m)
+    m = re.sub("\(.*?\-", "", m)
     print(m)
-    df.loc[len(df.index)] = ["North Georgia Technical College",currmjr,m]
+    df.loc[len(df.index)] = ["Central Georgia Technical College",currmjr, m]
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
     df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)

@@ -14,12 +14,12 @@ def extract(pdfs):
 
 		return text
 
-extractedText = extract('completed colleges/southgeorgiatech.pdf')
+extractedText = extract('collegeList/laniertech.pdf')
 book = load_workbook('data.xlsx')
 sheet=book.worksheets[0]
-
 df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
-pattern = r"[A-Z]{4} \d{4} \- [A-Z].+ \("
+
+pattern = r"[A-Z]{4} \d{4} [A-Z].+ \("
 matches = []
 
 for text in extractedText:
@@ -41,9 +41,20 @@ for i in final:
 		print('---------------------------------')
 		print(i[0:4])
 	currmjr = i[0:4]
+	if i[0:9] == "EMSP 2510":
+		print("EMSP 2510 Clinical Applications for the Paramedic - I")
+		df.loc[len(df.index)] = ["Lanier Technical College",currmjr,"EMSP 2510 Clinical Applications for the Paramedic - I"]
+		continue
+	if i[0:9] == "EMSP 2520":
+		print("EMSP 2510 Clinical Applications for the Paramedic - II")
+		df.loc[len(df.index)] = ["Lanier Technical College",currmjr,"EMSP 2510 Clinical Applications for the Paramedic - II"]
+		continue
+	if i[0:9] == "EMSP 2530":
+		print("EMSP 2510 Clinical Applications for the Paramedic - III")
+		df.loc[len(df.index)] = ["Lanier Technical College",currmjr,"EMSP 2510 Clinical Applications for the Paramedic - III"]
+		continue
 	i = i.strip("(")
-	i = i.replace("昀椀", "fi")
 	print(i)
-	df.loc[len(df.index)] = ["South Georgia Technical College",currmjr, i]
+	df.loc[len(df.index)] = ["Lanier Technical College",currmjr,i]
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
     df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)

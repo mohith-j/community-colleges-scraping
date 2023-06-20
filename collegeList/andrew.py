@@ -14,14 +14,23 @@ def extract(pdfs):
 
         return text
 #AC-Catalog-2022-2023-08082022
-extractedText = extract('completed colleges/centralgeorgiatech.pdf')
+extractedText = extract('collegeList/andrew.pdf')
 
 book = load_workbook('data.xlsx')
 sheet=book.worksheets[0]
 
+
+
 df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
-pattern = r"[A-Z]{4} \d{4} \| .+"
+pattern = r"[A-Z]{3} [0-9]{3} - [A-Z].+\("
+majors = r"[A-Z]{3} - [A-Za-z].+?\."
+majormatches = []
 matches = []
+
+for maj in extractedText:
+    mat = re.findall(majors, maj)
+    if mat:
+        majormatches.extend(mat)
 
 for text in extractedText:
     match = re.findall(pattern, text)
@@ -29,15 +38,21 @@ for text in extractedText:
         matches.extend(match)
 
 count = 0
-currmjr = ""
-for m in matches:
-    if currmjr != m[0:4]:
-        print('---------------------------------')
-        print(m[0:4])
-    currmjr = m[0:4]
-    m = re.sub("\(.*?\)","",m)
-    m = re.sub("\(.*?\-", "", m)
-    print(m)
-    df.loc[len(df.index)] = ["Central Georgia Technical College",currmjr, m]
+for mm in majormatches:
+    mm = mm.strip(" .")
+    if mm == "ACE - Andrew College Experience":
+        continue
+    majorname = mm[0:3]
+    print('---------------------------------')
+    mm = mm[6:]
+    print(mm)
+    for m in matches:
+        if count == 0 and m == "CRM 220 - Clinical Practicum (":
+            count += 1
+            continue
+        m = m.strip("(")
+        if m[0:3] == majorname:
+            print(m)
+            df.loc[len(df.index)] = ["Andrew College",majorname, m]
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
     df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)

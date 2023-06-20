@@ -14,17 +14,13 @@ def extract(pdfs):
 
 		return text
 
-extractedText = extract('completed colleges/southernregional.pdf')
-
-book = load_workbook('data.xlsx')
-sheet=book.worksheets[0]
-
-
+extractedText = extract('collegeList/atlantainstmusmed.pdf')
 
 df = pd.DataFrame(columns=['Colleges','Majors','Courses'])
-
-pattern = r"[A-Z]{4} \d{4} \- [A-Z].+"
+pattern = r"[A-Z]{3}\d{3} [A-Z].+"
 matches = []
+book = load_workbook('data.xlsx')
+sheet=book.worksheets[0]
 
 for text in extractedText:
 	match = re.findall(pattern, text)
@@ -35,22 +31,28 @@ for text in extractedText:
 li = []
 final = []
 for m in matches:
-	if m[0:9] not in li:
-		li.append(m[0:9])
+	m = m.strip("    1")
+	m = m.strip("*")
+	m = m.strip("*     2")
+	if "*    3Associate of Applied Science in Music and Technology — Total Credit Hours: 94COURSES" in m:
+		m = m.strip("*    3Associate of Applied Science in Music and Technology — Total Credit Hours: 94COURSES")
+	m = m.strip("*     3")
+	m = m.strip("*     4")
+	m = m.strip("    5")
+	m = m.strip("    6")
+	if m == "110":
+		continue
+	if m[0:6] not in li:
+		li.append(m[0:6])
 		final.append(m)
 final = sorted(final)
 currmjr = ""
 for i in final:
-	if currmjr != i[0:4]:
+	if currmjr != i[0:3]:
 		print('---------------------------------')
-		print(i[0:4])
-	currmjr = i[0:4]
+		print(i[0:3])
+	currmjr = i[0:3]
 	print(i)
-	# if "ACCT 2115 - Bookkeeper Certication Review" in i:
-	# 	# df.loc[len(df.index)] = ["Southern Regional Technical College",currmjr, "ACCT 2115 - Bookkeeper Certication Review"]
-	# 	print("wassup")
-	df.loc[len(df.index)] = ["Southern Regional Technical College",currmjr, i]
-df = df.applymap(lambda x: x.encode('unicode_escape').
-                 decode('utf-8') if isinstance(x, str) else x)
+	df.loc[len(df.index)] = ["Atlanta Institute of Music and Media",currmjr, i]
 with pd.ExcelWriter('data.xlsx',mode='a', if_sheet_exists='overlay') as writer:  
     df.to_excel(writer,sheet_name="Sheet",header=False, index=False, startrow=sheet.max_row)

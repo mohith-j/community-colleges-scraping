@@ -15,7 +15,7 @@ def extract(pdfs):
 
         return text
 
-extractedText = extract('completed colleges/piedmont.pdf')
+extractedText = extract('collegeList/piedmont.pdf')
 
 book = load_workbook('data.xlsx')
 sheet=book.worksheets[0]
